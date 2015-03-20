@@ -16,7 +16,7 @@ def crackpolygon(polylines, count):
         else:
             centroid = rs.CurveAreaCentroid(polyline)
             centpt = rs.AddPoint(centroid[0])
-            cruves = rs.ExplodeCurves(polyline)
+            curves = rs.ExplodeCurves(polyline)
             for crv in curves:
                 pt1 = rs.CurveStartPoint(crv)
                 pt2 = rs.CurveEndPoint(crv)
@@ -29,11 +29,11 @@ def crackpolygon(polylines, count):
                 newPolylines.append(newpl)
                 rs.DeleteObject(crv)
             rs.DeleteObjects(centpt)
-    return crackpolygon(polylines, count+1)
+    return crackpolygon(newPolylines, count+1)
     
 maxGen = rs.GetInteger("How many iterations would you like to do?", 3)
 polyline = rs.GetCurveObject("Pick a closed curve to crack")
-polylineGuid = pl[0]
+polylineGuid = polyline[0]
 polygons = []
 polygons.append(polylineGuid)
 crackpolygon(polygons, 0)
