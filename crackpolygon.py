@@ -31,11 +31,11 @@ def crackpolygon(polylines, count):
             rs.DeleteObjects(centpt)
     return crackpolygon(newPolylines, count+1)
     
-maxGen = rs.GetInteger("How many iterations would you like to do?", 3)
-polyline = rs.GetCurveObject("Pick a closed curve to crack")
-polylineGuid = polyline[0]
-polygons = []
-polygons.append(polylineGuid)
-crackpolygon(polygons, 0)
-            
-                
+    
+def main():
+    maxGen = rs.GetInteger("How many iterations would you like to do?", 3)
+    polyline = rs.GetCurveObject("Pick a closed curve to crack")
+    polylineGuid = polyline[0]
+    polygons = []
+    polygons.append(polylineGuid)
+    crackpolygon(polygons, 0)
