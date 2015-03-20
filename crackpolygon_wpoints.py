@@ -6,7 +6,7 @@ import rhinoscriptsyntax as rs
 
 
 
-def crackpolygon(polylines, count, maxGen):
+def crackpolygon(polylines, count, maxGen, attrPts ):
     #count = # of times to crack, # generations
     #pls = polylines
     newPolylines = []
@@ -28,19 +28,31 @@ def crackpolygon(polylines, count, maxGen):
                 pts.append(centpt)
                 pts.append(pt1)
                 newpl = rs.AddPolyline(pts)
-                newPolylines.append(newpl)
+                addCurve = False
+                for pt in attrPts:
+                    if isPointInCurve(pt,newpl):
+                        addCurve = True
+                if addCurve:
+                    newPolylines.append(newpl)
                 rs.DeleteObject(crv)
             rs.DeleteObjects(centpt)
-    return crackpolygon(newPolylines, count+1, maxGen)
+    return crackpolygon(newPolylines, count+1, maxGen, attrPts )
+    
+def isPointInCurves(pt, curve):
+    curve = rs.coercecurve(curve)
+    return curve.Contains(pt)
+    
     
     
 def main():
+    attrPts = rs.GetPoints("select attractor points")
+    
     maxGen = rs.GetInteger("How many iterations would you like to do?", 3)
     polyline = rs.GetCurveObject("Pick a closed curve to crack")
     polylineGuid = polyline[0]
     polygons = []
     polygons.append(polylineGuid)
-    crackpolygon(polygons, 0, maxGen)
+    crackpolygon(polygons, 0, maxGen, attrPts )
 
 if __name__ == "__main__":
     main()
